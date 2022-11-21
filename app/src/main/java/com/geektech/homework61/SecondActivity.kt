@@ -8,8 +8,7 @@ import com.geektech.homework61.databinding.ActivitySecondBinding
 
 class SecondActivity : AppCompatActivity() {
 
-   private lateinit var binding: ActivitySecondBinding
-
+    private lateinit var binding: ActivitySecondBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,24 +21,33 @@ class SecondActivity : AppCompatActivity() {
 
 
     private fun showResult() {
-        val result = intent.getStringExtra("text")
-        binding.etSecond.setText(result)
+        val extras: Bundle? = intent.extras
+        val title = extras?.getString(MAIN_KEY)
+        binding.etSecond.setText(title)
     }
 
     private fun sendResult() {
         binding.btnSecond.setOnClickListener {
             val intent = Intent(this@SecondActivity, MainActivity::class.java)
-            if (binding.etSecond.text.isEmpty()) {
+            val textSecond = binding.etSecond.text.toString()
+            if (textSecond.isEmpty()) {
                 Toast.makeText(
                     this,
                     getString(R.string.The_field_must_not_be_empty),
                     Toast.LENGTH_LONG
                 ).show()
             } else {
-                intent.putExtra("data", binding.etSecond.text.toString())
-                startActivity(intent)
+                intent.putExtra(SECOND_KEY, textSecond)
+                setResult(RESULT_OK, intent)
                 finish()
             }
         }
     }
+
+    companion object {
+        private const val MAIN_KEY = "text"
+        private const val SECOND_KEY = "data"
+
+    }
+
 }
